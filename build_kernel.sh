@@ -24,6 +24,10 @@ export CLANG_PATH=/android/dev/tc/proton-clang
 
 export OUT_PATH=$PWD/out
 
+#
+# Kernel building
+#
+
 # Update PATH (dtc,clang,tc)
 # DTC needed (https://forum.xda-developers.com/attachments/device-tree-compiler-zip.4829019/)
 # More info:  https://forum.xda-developers.com/t/guide-how-to-compile-kernel-dtbo-for-redmi-k20.3973787/
@@ -60,8 +64,8 @@ fi
 
 # AnyKernel
 export ANYKERNEL_URL=https://github.com/BitOBSessiON/AnyKernel3
-export ANYKERNEL_BRANCH=vayu
 export ANYKERNEL_PATH=$OUT_PATH/AnyKernel3
+export ANYKERNEL_BRANCH=vayu
 export ZIPNAME="BitO-$DEVICE-$(date '+%Y%m%d-%H%M').zip"
 
 if [ -f "$OUT_PATH/arch/arm64/boot/Image.gz-dtb" ]; then
