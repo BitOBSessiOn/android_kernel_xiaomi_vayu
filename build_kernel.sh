@@ -7,8 +7,11 @@ export DTC_EXT=dtc
 export DEVICE=vayu
 export DEVICE_CONFIG=vayu_bito_defconfig
 
-# Mandatory for vayu
-export BUILD_DTBO=true
+# Mandatory for vayu, but custom build seems to break something...
+export BUILD_DTBO=false
+
+# Do we build final zip ?
+export BUILD_ZIP=true
 
 # TC:
 # git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 toolchain
@@ -50,7 +53,9 @@ if $BUILD_DTBO; then
 	echo -e "Building DTBO..."
 	MKDTBOIMG_PATH=/android/bin/
 
-	if ! python $MKDTBOIMG_PATH/mkdtboimg.py create /$OUT_PATH/arch/arm64/boot/dtbo.img $OUT_PATH/arch/arm64/boot/dts/qcom/*.dtbo; then
+# DEPRECATED:
+#	if ! mkdtimg create /$OUT_PATH/arch/arm64/boot/dtbo.img --page_size=4096 $OUT_PATH/arch/arm64/boot/dts/qcom/*.dtbo; then
+	if ! python $MKDTBOIMG_PATH/mkdtboimg.py create /$OUT_PATH/arch/arm64/boot/dtbo.img --page_size=4096 $OUT_PATH/arch/arm64/boot/dts/qcom/*.dtbo; then
 		echo -e "Error creating DTBO"
 		exit 1
 	else
@@ -63,6 +68,8 @@ fi
 #
 
 # AnyKernel
+if $BUILD_ZIP; then
+
 export ANYKERNEL_URL=https://github.com/BitOBSessiON/AnyKernel3
 export ANYKERNEL_PATH=$OUT_PATH/AnyKernel3
 export ANYKERNEL_BRANCH=vayu
@@ -95,5 +102,7 @@ if [ -f "$OUT_PATH/arch/arm64/boot/Image.gz-dtb" ]; then
 	rm -rf $OUT_PATH/arch/arm64/boot
 else
 	echo -e "Error packaging kernel."
+fi
+
 fi
 
